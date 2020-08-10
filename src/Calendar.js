@@ -29,7 +29,7 @@ const Calendar = ({
   renderFooter,
   customDaysClassName,
   iconLeft,
-  iconRight
+  iconRight,
 }) => {
   const calendarElement = useRef(null);
   const [mainState, setMainState] = useState({

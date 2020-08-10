@@ -16,7 +16,7 @@ const Header = ({
   isYearSelectorOpen,
   locale,
   iconLeft,
-  iconRight
+  iconRight,
 }) => {
   const headerElement = useRef(null);
   const monthYearWrapperElement = useRef(null);
@@ -155,7 +155,7 @@ const Header = ({
   return (
     <div ref={headerElement} className="Calendar__header">
       <button
-        className={`Calendar__monthArrowWrapper ${iconLeft ? "" : "-right"}`}
+        className={`Calendar__monthArrowWrapper ${iconLeft ? '' : '-right'}`}
         onClick={() => {
           onMonthChangeTrigger('PREVIOUS');
         }}
@@ -163,7 +163,7 @@ const Header = ({
         type="button"
         disabled={isPreviousMonthArrowDisabled}
       >
-        <span className={iconLeft ? `icon ${iconLeft}` : "Calendar__monthArrow"} />
+        <span className={iconLeft ? `icon ${iconLeft}` : 'Calendar__monthArrow'} />
       </button>
       <div
         className="Calendar__monthYearContainer"
@@ -174,7 +174,7 @@ const Header = ({
         {monthYearButtons}
       </div>
       <button
-        className={`Calendar__monthArrowWrapper ${iconRight ? "" : "-left"}`}
+        className={`Calendar__monthArrowWrapper ${iconRight ? '' : '-left'}`}
         onClick={() => {
           onMonthChangeTrigger('NEXT');
         }}
@@ -182,7 +182,7 @@ const Header = ({
         type="button"
         disabled={isNextMonthArrowDisabled}
       >
-        <span className={iconRight ? `icon ${iconRight}` : "Calendar__monthArrow"} />
+        <span className={iconRight ? `icon ${iconRight}` : 'Calendar__monthArrow'} />
       </button>
     </div>
   );

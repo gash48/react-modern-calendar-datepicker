@@ -61,7 +61,9 @@ const getValueType = value => {
 };
 
 const getFormattedDate = date => {
-  return date ? { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() } : null;
+  return date
+    ? { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() }
+    : null;
 };
 
 const outputDate = date => {

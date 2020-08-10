@@ -71,7 +71,7 @@ const DatePicker = ({
     setCalendarVisiblity(false);
   };
 
-  if (typeof closePicker == 'function') {
+  if (typeof closePicker === 'function') {
     closePicker(closeCalendar);
   }
 
@@ -105,10 +105,8 @@ const DatePicker = ({
       inputElement.current.focus();
     } else if (isInnerElementFocused && e.relatedTarget) {
       e.relatedTarget.focus();
-    } else {
-      if (!inspectMode) {
-        setCalendarVisiblity(false);
-      }
+    } else if (!inspectMode) {
+      setCalendarVisiblity(false);
     }
   };
 
