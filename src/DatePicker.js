@@ -2,11 +2,23 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 
 import { Calendar } from './Calendar';
 import DatePickerInput from './DatePickerInput';
-import { getValueType } from './shared/generalUtils';
-import { TYPE_SINGLE_DATE, TYPE_MUTLI_DATE, TYPE_RANGE } from './shared/constants';
+import { getValueType, parseDate, returnDate } from './shared/generalUtils';
+import { TYPE_SINGLE_DATE, TYPE_MUTLI_DATE, TYPE_RANGE, DEFAULT_RANGES } from './shared/constants';
+
+const defaultRangeOptions = Object.values(DEFAULT_RANGES);
+
+const RangeListItem = ({ onClick, item, isSelected, customClass }) => (
+  <li
+    className={`${customClass} ${isSelected ? 'active' : ''}`}
+    onClick={() => onClick(item.range, item.key)}
+  >
+    {item.label}
+  </li>
+);
 
 const DatePicker = ({
-  value,
+  value: unformattedValue,
+  selectionKey,
   onChange,
   formatInputText,
   inputPlaceholder,
@@ -14,6 +26,7 @@ const DatePicker = ({
   inputName,
   renderInput,
   wrapperClassName,
+  calendarWrapperClassName,
   calendarClassName,
   calendarTodayClassName,
   calendarSelectedDayClassName,
@@ -34,21 +47,45 @@ const DatePicker = ({
   shouldHighlightWeekends,
   renderFooter,
   customDaysClassName,
+  enableQuickRangeList,
+  rangeListClassName,
+  rangeListItemClassName,
+  inspectMode,
+  closePicker,
+  disableAutoCloseOnSelection,
+  iconRightClassName,
+  iconLeftClassName,
 }) => {
   const calendarContainerElement = useRef(null);
   const inputElement = useRef(null);
   const shouldPreventToggle = useRef(false);
   const [isCalendarOpen, setCalendarVisiblity] = useState(false);
+  const value = parseDate(unformattedValue);
+  const options = enableQuickRangeList ? defaultRangeOptions : [];
 
-  useEffect(() => {
-    const handleBlur = () => {
-      setCalendarVisiblity(false);
-    };
-    window.addEventListener('blur', handleBlur, false);
-    return () => {
-      window.removeEventListener('blur', handleBlur, false);
-    };
-  }, []);
+  const openCalendar = () => {
+    if (!shouldPreventToggle.current) setCalendarVisiblity(true);
+  };
+
+  const closeCalendar = () => {
+    setCalendarVisiblity(false);
+  };
+
+  if (typeof closePicker == 'function') {
+    closePicker(closeCalendar);
+  }
+
+  if (!inspectMode) {
+    useEffect(() => {
+      const handleBlur = () => {
+        setCalendarVisiblity(false);
+      };
+      window.addEventListener('blur', handleBlur, false);
+      return () => {
+        window.removeEventListener('blur', handleBlur, false);
+      };
+    }, []);
+  }
 
   // handle input focus/blur
   useEffect(() => {
@@ -69,12 +106,10 @@ const DatePicker = ({
     } else if (isInnerElementFocused && e.relatedTarget) {
       e.relatedTarget.focus();
     } else {
-      setCalendarVisiblity(false);
+      if (!inspectMode) {
+        setCalendarVisiblity(false);
+      }
     }
-  };
-
-  const openCalendar = () => {
-    if (!shouldPreventToggle.current) setCalendarVisiblity(true);
   };
 
   // Keep the calendar in the screen bounds if input is near the window edges
@@ -110,9 +145,22 @@ const DatePicker = ({
 
   const handleCalendarChange = newValue => {
     const valueType = getValueType(value);
-    onChange(newValue);
-    if (valueType === TYPE_SINGLE_DATE) setCalendarVisiblity(false);
-    else if (valueType === TYPE_RANGE && newValue.from && newValue.to) setCalendarVisiblity(false);
+    onChange(returnDate(newValue), '');
+    if (!disableAutoCloseOnSelection) {
+      if (valueType === TYPE_SINGLE_DATE) setCalendarVisiblity(false);
+      else if (valueType === TYPE_RANGE && newValue.from && newValue.to)
+        setCalendarVisiblity(false);
+    }
+  };
+
+  const handleQuickRangeChange = (newValue, key) => {
+    const valueType = getValueType(value);
+    onChange(newValue, key);
+    if (!disableAutoCloseOnSelection) {
+      if (valueType === TYPE_SINGLE_DATE) setCalendarVisiblity(false);
+      else if (valueType === TYPE_RANGE && newValue.from && newValue.to)
+        setCalendarVisiblity(false);
+    }
   };
 
   const handleKeyUp = ({ key }) => {
@@ -144,6 +192,7 @@ const DatePicker = ({
     >
       <DatePickerInput
         ref={inputElement}
+        selectionKey={selectionKey}
         formatInputText={formatInputText}
         value={value}
         inputPlaceholder={inputPlaceholder}
@@ -156,7 +205,7 @@ const DatePicker = ({
         <>
           <div
             ref={calendarContainerElement}
-            className="DatePicker__calendarContainer"
+            className={`DatePicker__calendarContainer ${calendarWrapperClassName}`}
             data-testid="calendar-container"
             role="presentation"
             onMouseDown={() => {
@@ -185,7 +234,22 @@ const DatePicker = ({
               shouldHighlightWeekends={shouldHighlightWeekends}
               renderFooter={renderFooter}
               customDaysClassName={customDaysClassName}
+              iconLeft={iconLeftClassName}
+              iconRight={iconRightClassName}
             />
+            {enableQuickRangeList && options.length > 0 && (
+              <ul className={rangeListClassName}>
+                {options.map(item => (
+                  <RangeListItem
+                    key={`quick-range-${item.key}`}
+                    onClick={handleQuickRangeChange}
+                    item={item}
+                    isSelected={item.key == selectionKey}
+                    customClass={rangeListItemClassName}
+                  />
+                ))}
+              </ul>
+            )}
           </div>
           <div className="DatePicker__calendarArrow" />
         </>
@@ -198,6 +262,9 @@ DatePicker.defaultProps = {
   wrapperClassName: '',
   locale: 'en',
   calendarPopperPosition: 'auto',
+  rangeListItemClassName: '',
+  iconLeftClassName: '',
+  iconRightClassName: '',
 };
 
 export default DatePicker;

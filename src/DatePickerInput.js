@@ -2,17 +2,15 @@ import React from 'react';
 
 import { useLocaleUtils, useLocaleLanguage } from './shared/hooks';
 import { putZero, getValueType } from './shared/generalUtils';
-import { TYPE_SINGLE_DATE, TYPE_RANGE, TYPE_MUTLI_DATE } from './shared/constants';
+import { TYPE_SINGLE_DATE, TYPE_RANGE, TYPE_MUTLI_DATE, DEFAULT_RANGES } from './shared/constants';
 
 const DatePickerInput = React.forwardRef(
   (
-    { value, inputPlaceholder, inputClassName, inputName, formatInputText, renderInput, locale },
+    { value, inputPlaceholder, inputClassName, inputName, formatInputText, renderInput, locale, selectionKey },
     ref,
   ) => {
     const { getLanguageDigits } = useLocaleUtils(locale);
     const {
-      from: fromWord,
-      to: toWord,
       yearLetterSkip,
       digitSeparator,
       defaultPlaceholder,
@@ -40,7 +38,7 @@ const DatePickerInput = React.forwardRef(
         .slice(yearLetterSkip)}/${getLanguageDigits(putZero(to.month))}/${getLanguageDigits(
         putZero(to.day),
       )}`;
-      return `${fromWord} ${fromText} ${toWord} ${toText}`;
+      return selectionKey ? DEFAULT_RANGES[selectionKey].label : `${fromText} - ${toText}`;
     };
 
     const getMultiDateValue = () => {

@@ -48,9 +48,7 @@
       "limit": "11 KB"
     }
   ],
-  "dependencies": {
-    "jalaali-js": "^1.1.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"

@@ -48,13 +48,50 @@ const getValueType = value => {
   if (hasProperty(value, 'from') && hasProperty(value, 'to')) return TYPE_RANGE;
   if (
     !value ||
-    (hasProperty(value, 'year') && hasProperty(value, 'month') && hasProperty(value, 'day'))
+    (hasProperty(value, 'year') && hasProperty(value, 'month') && hasProperty(value, 'day')) ||
+    (hasProperty(value, 'getFullYear') &&
+      hasProperty(value, 'getMonth') &&
+      hasProperty(value, 'getDate'))
   ) {
     return TYPE_SINGLE_DATE;
   }
   throw new TypeError(
     `The passed value is malformed! Please make sure you're using one of the valid value types for date picker.`,
   );
+};
+
+const getFormattedDate = date => {
+  return date ? { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() } : null;
+};
+
+const outputDate = date => {
+  return date ? new Date(date.year, date.month - 1, date.day) : null;
+};
+
+const parseDate = value => {
+  const type = getValueType(value);
+  switch (type) {
+    case TYPE_SINGLE_DATE:
+      return getFormattedDate(value);
+    case TYPE_RANGE:
+      const { from, to } = value;
+      return { from: getFormattedDate(from), to: getFormattedDate(to) };
+    default:
+      return null;
+  }
+};
+
+const returnDate = value => {
+  const type = getValueType(value);
+  switch (type) {
+    case TYPE_SINGLE_DATE:
+      return outputDate(value);
+    case TYPE_RANGE:
+      const { from, to } = value;
+      return { from: outputDate(from), to: outputDate(to) };
+    default:
+      return null;
+  }
 };
 
 export {
@@ -66,4 +103,6 @@ export {
   deepCloneObject,
   getDateAccordingToMonth,
   getValueType,
+  parseDate,
+  returnDate,
 };
