@@ -32,16 +32,16 @@ const DatePickerInput = React.forwardRef(
     const getDayRangeValue = () => {
       if (!value.from || !value.to) return '';
       const { from, to } = value;
-      const fromText = `${getLanguageDigits(putZero(from.year))
-        .toString()
-        .slice(yearLetterSkip)}/${getLanguageDigits(putZero(from.month))}/${getLanguageDigits(
+      const fromText = `${getLanguageDigits(putZero(from.month))}/${getLanguageDigits(
         putZero(from.day),
-      )}`;
-      const toText = `${getLanguageDigits(putZero(to.year))
+      )}/${getLanguageDigits(putZero(from.year))
         .toString()
-        .slice(yearLetterSkip)}/${getLanguageDigits(putZero(to.month))}/${getLanguageDigits(
+        .slice(yearLetterSkip)}`;
+      const toText = `${getLanguageDigits(putZero(to.month))}/${getLanguageDigits(
         putZero(to.day),
-      )}`;
+      )}/${getLanguageDigits(putZero(to.year))
+        .toString()
+        .slice(yearLetterSkip)}`;
       return selectionKey ? DEFAULT_RANGES[selectionKey].label : `${fromText} - ${toText}`;
     };
 

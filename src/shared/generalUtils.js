@@ -43,15 +43,15 @@ const getDateAccordingToMonth = (date, direction) => {
 const hasProperty = (object, propertyName) =>
   Object.prototype.hasOwnProperty.call(object || {}, propertyName);
 
+const isTypeDate = obj => 'getFullYear' in obj && 'getMonth' in obj && 'getDate' in obj;
+
 const getValueType = value => {
   if (Array.isArray(value)) return TYPE_MUTLI_DATE;
   if (hasProperty(value, 'from') && hasProperty(value, 'to')) return TYPE_RANGE;
   if (
     !value ||
     (hasProperty(value, 'year') && hasProperty(value, 'month') && hasProperty(value, 'day')) ||
-    (hasProperty(value, 'getFullYear') &&
-      hasProperty(value, 'getMonth') &&
-      hasProperty(value, 'getDate'))
+    isTypeDate(value)
   ) {
     return TYPE_SINGLE_DATE;
   }
@@ -71,6 +71,7 @@ const outputDate = date => {
 };
 
 const parseDate = value => {
+  if (!value) return null;
   const type = getValueType(value);
   switch (type) {
     case TYPE_SINGLE_DATE:
