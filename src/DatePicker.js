@@ -55,6 +55,7 @@ const DatePicker = ({
   disableAutoCloseOnSelection,
   iconRightClassName,
   iconLeftClassName,
+  renderIcon,
 }) => {
   const calendarContainerElement = useRef(null);
   const inputElement = useRef(null);
@@ -185,7 +186,7 @@ const DatePicker = ({
       onFocus={openCalendar}
       onBlur={handleBlur}
       onKeyUp={handleKeyUp}
-      className={`DatePicker ${wrapperClassName}`}
+      className={`DatePicker ${isCalendarOpen ? 'selected' : ''} ${wrapperClassName}`}
       role="presentation"
     >
       <DatePickerInput
@@ -199,6 +200,7 @@ const DatePicker = ({
         inputName={inputName}
         locale={locale}
       />
+      {renderIcon}
       {isCalendarOpen && (
         <>
           <div

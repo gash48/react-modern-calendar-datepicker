@@ -11,7 +11,7 @@
     "test": "jest ./test --coverage",
     "test:watch": "jest ./test --watch",
     "clean": "rimraf lib",
-    "build": "cross-env NODE_ENV=production rollup -c && cp -R ./lib ../snackmagic-brands/node_modules/react-modern-calendar-datepicker",
+    "build": "cross-env NODE_ENV=production rollup -c",
     "size": "npm run build && size-limit",
     "checkAll": "npm run size && npm run lint && npm run test",
     "contributors:generate": "npm all-contributors generate"
