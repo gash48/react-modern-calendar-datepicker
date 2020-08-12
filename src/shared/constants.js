@@ -96,8 +96,8 @@ export const DEFAULT_RANGES = {
   },
   prevMonth: {
     key: 'prevMonth',
-    label: 'A Month Ago',
-    range: rangeCalc('m', 1, true),
+    label: '30 Days Ago',
+    range: rangeCalc('d', 29, true),
   },
   year: {
     key: 'year',
