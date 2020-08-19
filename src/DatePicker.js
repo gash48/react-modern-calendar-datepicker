@@ -5,7 +5,7 @@ import DatePickerInput from './DatePickerInput';
 import { getValueType, parseDate, returnDate } from './shared/generalUtils';
 import { TYPE_SINGLE_DATE, TYPE_MUTLI_DATE, TYPE_RANGE, DEFAULT_RANGES } from './shared/constants';
 
-const defaultRangeOptions = Object.values(DEFAULT_RANGES);
+const defaultRangeOptions = Object.keys(DEFAULT_RANGES).map(rangeKey => DEFAULT_RANGES[rangeKey]);
 
 const RangeListItem = ({ onClick, item, isSelected, customClass }) => (
   <li
