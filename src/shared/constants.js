@@ -52,11 +52,10 @@ const formatDate = date => ({
   day: date.getDate(),
 });
 
-const rangeCalc = (type, diff, toYesterday = false) => {
+const rangeCalc = (type, diff) => {
   const today = new Date();
-  if (toYesterday) {
-    today.setDate(today.getDate() - 1);
-  }
+  today.setDate(today.getDate() - 1);
+
   const { year, month, day } = formatDate(today);
   switch (type) {
     case 'd':
@@ -74,20 +73,15 @@ const rangeCalc = (type, diff, toYesterday = false) => {
 };
 
 export const DEFAULT_RANGES = {
-  today: {
-    key: 'today',
-    label: 'Today',
-    range: rangeCalc('d', 0),
-  },
   yesterday: {
     key: 'yesterday',
     label: 'Yesterday',
-    range: rangeCalc('d', 0, true),
+    range: rangeCalc('d', 0),
   },
   week: {
     key: 'week',
     label: '7 Days Ago',
-    range: rangeCalc('d', 6, true),
+    range: rangeCalc('d', 6),
   },
   month: {
     key: 'month',
@@ -97,7 +91,7 @@ export const DEFAULT_RANGES = {
   prevMonth: {
     key: 'prevMonth',
     label: '30 Days Ago',
-    range: rangeCalc('d', 29, true),
+    range: rangeCalc('d', 29),
   },
   year: {
     key: 'year',
@@ -107,7 +101,7 @@ export const DEFAULT_RANGES = {
   prevYear: {
     key: 'prevYear',
     label: 'A Year Ago',
-    range: rangeCalc('y', 1, true),
+    range: rangeCalc('y', 1),
   },
 };
 
