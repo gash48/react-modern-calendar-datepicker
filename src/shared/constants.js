@@ -80,7 +80,7 @@ export const DEFAULT_RANGES = {
   },
   week: {
     key: 'week',
-    label: '7 Days Ago',
+    label: 'Last 7 Days',
     range: rangeCalc('d', 6),
   },
   month: {
@@ -90,7 +90,7 @@ export const DEFAULT_RANGES = {
   },
   prevMonth: {
     key: 'prevMonth',
-    label: '30 Days Ago',
+    label: 'Last 30 Days',
     range: rangeCalc('d', 29),
   },
   year: {
@@ -100,7 +100,7 @@ export const DEFAULT_RANGES = {
   },
   prevYear: {
     key: 'prevYear',
-    label: 'A Year Ago',
+    label: 'Last Year',
     range: rangeCalc('y', 1),
   },
 };
